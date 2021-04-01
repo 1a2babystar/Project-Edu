@@ -1,5 +1,6 @@
 const socket = io("/");
 const videoGrid = document.getElementById("video-grid");
+const screen_vid = document.getElementById("screen-video");
 const myPeer = new Peer(undefined, {
   host: "/",
   port: "8080",
@@ -26,6 +27,27 @@ const audiences = {};
 // List of the participants who are sending their video streams.
 // This is only necessary if the presenter also serves as a supervisor.
 const observees = {};
+navigator.mediaDevices.getDisplayMedia().then((stream) => {
+  screen_vid.srcObject = stream;
+  screen_vid.addEventListener("loadedmetadata", () => {
+    screen_vid.play();
+  });
+  socket.on("participant-joined", (userId) => {
+    console.log(`Participant joined: ${userId}`);
+
+    // Call the participant to provide your stream.
+    callParticipant(userId, stream, true);
+  });
+
+  // When this presenter has re-entered to the room,
+  // the server will make you to call those participants
+  // who were already in the room.
+  socket.on("call-to", (peers) => {
+    for (let userId of peers) {
+      callParticipant(userId, stream, true);
+    }
+  });
+});
 
 navigator.mediaDevices
   .getUserMedia({
@@ -56,7 +78,7 @@ navigator.mediaDevices
       console.log(`Participant joined: ${userId}`);
 
       // Call the participant to provide your stream.
-      callParticipant(userId, stream);
+      callParticipant(userId, stream, false);
     });
 
     // When this presenter has re-entered to the room,
@@ -64,7 +86,7 @@ navigator.mediaDevices
     // who were already in the room.
     socket.on("call-to", (peers) => {
       for (let userId of peers) {
-        callParticipant(userId, stream);
+        callParticipant(userId, stream, false);
       }
     });
 
@@ -117,8 +139,8 @@ myPeer.on("connection", function (conn) {
 // Call a participant to provide the presenter's stream.
 // The callee will answer this call with no stream (or with audio stream),
 // thus one-way (presenter => participant) call will be established.
-function callParticipant(userId, stream) {
-  const call = myPeer.call(userId, stream);
+function callParticipant(userId, stream, screen) {
+  const call = myPeer.call(userId, stream, [screen]);
 
   // TODO: it isn't sure if this will work. The callee
   // will answer this call with no stream.

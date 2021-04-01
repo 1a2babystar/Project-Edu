@@ -1,5 +1,6 @@
 const socket = io("/");
 const videoGrid = document.getElementById("video-grid");
+const screen_vid = document.getElementById("screen-video");
 const myPeer = new Peer(undefined, {
   host: "/",
   port: "8080",
@@ -29,8 +30,15 @@ myPeer.on("call", (call) => {
   call.answer(); // You just watch the presenter.
   const video = document.createElement("video");
 
-  call.on("stream", (userVideoStream) => {
-    addVideoStream(video, userVideoStream);
+  call.on("stream", (userVideoStream, screen) => {
+    console.log(screen);
+    if(screen){
+      addVideoStream(screen_vid, userVideoStream, screen);
+      video.remove();
+    }
+    else{
+      addVideoStream(video, userVideoStream, screen);
+    }
   });
 
   call.on("close", () => {
@@ -50,7 +58,7 @@ navigator.mediaDevices
     audio: true,
   })
   .then((stream) => {
-    addVideoStream(myVideo, stream);
+    addVideoStream(myVideo, stream, false);
 
     // The server tells you to connect to a new supervisor.
     socket.on("call-to", (userId) => {
@@ -62,12 +70,14 @@ navigator.mediaDevices
     });
   });
 
-function addVideoStream(video, stream) {
+function addVideoStream(video, stream, screen) {
   video.srcObject = stream;
   video.addEventListener("loadedmetadata", () => {
     video.play();
   });
-  videoGrid.append(video);
+  if(!screen){
+    videoGrid.append(video);
+  }
 }
 
 // Call a supervisor to provide the participant's stream.
@@ -168,7 +178,6 @@ webgazer
     }
 
     if (startLookTime + LOOK_DELAY < timestamp) {
-      console.log("ohoh");
       console.log(left, right, top, bottom);
       videogrid.style.backgroundColor = "red";
       add_concentrate_log(timestamp, 0);
