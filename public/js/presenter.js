@@ -5,8 +5,13 @@ const myPeer = new Peer(undefined, {
   host: "/",
   port: "8080",
 });
+const screenPeer = new Peer(undefined, {
+  host: "/",
+  port: "8080",
+});
 
 var myID = "";
+var screenID = ""
 
 // The value of this promise is used to broadcast that you've joined the room.
 // Broadcasting occurs when getUserMedia completes, thus all event listeners
@@ -16,6 +21,9 @@ const myUserIdPromise = new Promise((resolve) => {
     resolve(id); // My user ID
     myID = id;
   });
+  screenPeer.on("open", (id) => {
+    screenID = id;
+  })
 });
 
 const myVideo = document.createElement("video");
@@ -27,16 +35,16 @@ const audiences = {};
 // List of the participants who are sending their video streams.
 // This is only necessary if the presenter also serves as a supervisor.
 const observees = {};
+
 navigator.mediaDevices.getDisplayMedia().then((stream) => {
   screen_vid.srcObject = stream;
   screen_vid.addEventListener("loadedmetadata", () => {
     screen_vid.play();
   });
-  socket.on("participant-joined", (userId) => {
-    console.log(`Participant joined: ${userId}`);
 
+  socket.on("participant-joined", (userId) => {
     // Call the participant to provide your stream.
-    callParticipant(userId, stream, true);
+    screenPeer.call(userId, stream, { metadata: { scn: true } });
   });
 
   // When this presenter has re-entered to the room,
@@ -44,7 +52,7 @@ navigator.mediaDevices.getDisplayMedia().then((stream) => {
   // who were already in the room.
   socket.on("call-to", (peers) => {
     for (let userId of peers) {
-      callParticipant(userId, stream, true);
+      screenPeer.call(userId, stream, { metadata: { scn: true } });
     }
   });
 });
@@ -140,7 +148,8 @@ myPeer.on("connection", function (conn) {
 // The callee will answer this call with no stream (or with audio stream),
 // thus one-way (presenter => participant) call will be established.
 function callParticipant(userId, stream, screen) {
-  const call = myPeer.call(userId, stream, [screen]);
+  console.log(screen)
+  const call = myPeer.call(userId, stream, { metadata: { scn: screen } });
 
   // TODO: it isn't sure if this will work. The callee
   // will answer this call with no stream.

@@ -27,11 +27,13 @@ let conn;
 
 // A call from the presenter
 myPeer.on("call", (call) => {
+  screen = call.metadata.scn
+  console.log(screen);
+  console.log(call)
   call.answer(); // You just watch the presenter.
   const video = document.createElement("video");
 
-  call.on("stream", (userVideoStream, screen) => {
-    console.log(screen);
+  call.on("stream", (userVideoStream) => {
     if(screen){
       addVideoStream(screen_vid, userVideoStream, screen);
       video.remove();
@@ -148,48 +150,3 @@ function send_data(data) {
   // Send data to server
   socket.emit("concent_data", data);
 }
-
-webgazer
-  .setGazeListener((data, timestamp) => {
-    // console.log(data, timestamp);
-    const videogrid = document.getElementById("video-grid");
-    const left = videogrid.offsetLeft;
-    const right = videogrid.offsetLeft + videogrid.offsetWidth;
-    const top = videogrid.offsetTop;
-    const bottom = videogrid.offsetTop + videogrid.offsetHeight;
-
-    if (data == null || lookDirection === "STOP") return;
-
-    if (
-      data.x >= left &&
-      data.x <= right &&
-      data.y >= top &&
-      data.y <= bottom
-    ) {
-      // videogrid.style.backgroundColor = "blue";
-      startLookTime = Number.POSITIVE_INFINITY; // restart timer
-      lookDirection = null;
-      add_concentrate_log(timestamp, 10);
-    } else if (lookDirection !== "RESET" && lookDirection === null) {
-      // videogrid.style.backgroundColor = "yellow";
-      startLookTime = timestamp;
-      lookDirection = "OUT";
-      add_concentrate_log(timestamp, 5);
-    }
-
-    if (startLookTime + LOOK_DELAY < timestamp) {
-      console.log(left, right, top, bottom);
-      // videogrid.style.backgroundColor = "red";
-      add_concentrate_log(timestamp, 0);
-
-      startLookTime = Number.POSITIVE_INFINITY;
-      lookDirection = "STOP";
-      setTimeout(() => {
-        lookDirection = "RESET";
-      }, 200);
-    }
-  })
-  .begin();
-
-// uncomment to hide videopreview and predictionpoints of webgazer
-// webgazer.showVideoPreview(false).showPredictionPoints(false);
