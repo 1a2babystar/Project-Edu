@@ -22,21 +22,11 @@
     <link rel="stylesheet" type="text/css" href="/css/presenter-room.css">
   </head>
   <body>
-    <div id="wrapper">
-      <div id="left">
-        <div id="video-grid"></div>
-        <div id="screen-wrapper">
-          <video id="screen-video"></video>
-        </div>
-        <div id="menu-box">
-          <div id="audio-grid"></div>
-          <!-- <div class="btn-group" role="group" aria-label="Basic example">
-            <button type="button" class="btn btn-secondary">Left</button>
-            <button type="button" class="btn btn-secondary">Middle</button>
-            <button type="button" class="btn btn-secondary">Right</button>
-          </div> -->
-        </div>
-      </div>
+    <div id="main">
+      <div id="questions"></div>
+      <div id="video-grid"></div>
+      <video id="screen-video"></video>
+      <div id="audio-grid"></div>
       <div id="right">
         <div id="chart-wrapper">
           <canvas id="myChart"/>
@@ -51,8 +41,8 @@
         <div id="chatting">
           <ul id="messages"></ul>
           <form id="form" action="">
-            <input id="input" autocomplete="off" />
-            <button type="submit" class="btn btn-success">Send</button>
+            <input id="input" autocomplete="off" placeholder="Post a question"/>
+            <button class="btn btn-success">Ask</button>
           </form>
         </div>
       </div>

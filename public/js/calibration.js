@@ -83,16 +83,16 @@ $(document).ready(function(){
         $("#webgazerVideoContainer").hide();
         $("#main").show();
         send = true;
-        // webgazer.showPredictionPoints(false);
+        webgazer.showPredictionPoints(false);
       }
     });
 });
 
 function skip(){
   $("#calib").hide();
-  // $("#webgazerVideoContainer").hide();
+  $("#webgazerVideoContainer").hide();
   $("#main").show();
-  webgazer.showVideoPreview(true).showPredictionPoints(true);
+  webgazer.showVideoPreview(false).showPredictionPoints(false);
   send = true;
 }
 
