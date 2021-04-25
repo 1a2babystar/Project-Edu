@@ -8,6 +8,7 @@
     <script>
       const ROOM_ID = "<%= room_id %>";
     </script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css" rel="stylesheet">
     <script src="https://unpkg.com/peerjs@1.2.0/dist/peerjs.min.js" defer></script>
     <script src="/socket.io/socket.io.js" defer></script>
     <script src="/js/gazer.js" defer></script>
@@ -28,7 +29,7 @@
       <button id="see-parti" onclick="partilist()">Participants</button>
       <div id="partlist" style="display:none;"></div>
       <div id="questions"></div>
-      <button id="mute">MUTE</button>
+      <i id="mute" class="fas fa-microphone-slash fa-3x"></i>
       <div style="width: 100%">
         <div id="chatting">
           <ul id="messages"></ul>

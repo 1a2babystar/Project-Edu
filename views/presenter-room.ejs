@@ -12,6 +12,9 @@
       src="https://unpkg.com/peerjs@1.2.0/dist/peerjs.min.js"
       defer
     ></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@1,600&family=Roboto:wght@100&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
@@ -27,24 +30,22 @@
       <div id="video-grid"></div>
       <video id="screen-video"></video>
       <div id="audio-grid"></div>
-      <div id="right">
-        <div id="chart-wrapper">
-          <canvas id="myChart"/>
-        </div>
-        <button
-          id="invite" type="button" class="btn btn-outline-success btn-sm"
-          onclick="alert(`${window.location.origin}/room/${ROOM_ID}`)"
-        >
-          Invite
-        </button>
-        <button id="screen-share" type="button" class="btn btn-outline-success btn-sm" onclick="startScreenSharing()">Share Screen</button>
-        <div id="chatting">
-          <ul id="messages"></ul>
-          <form id="form" action="">
-            <input id="input" autocomplete="off" placeholder="Post a question"/>
-            <button class="btn btn-success">Ask</button>
-          </form>
-        </div>
+      <div id="chart-wrapper">
+        <canvas id="myChart"/>
+      </div>
+      <button
+        id="invite" type="button" class="btn btn-outline-success btn-sm"
+        onclick="alert(`${window.location.origin}/room/${ROOM_ID}`)"
+      >
+        Invite
+      </button>
+      <button id="screen-share" type="button" class="btn btn-outline-success btn-sm" onclick="startScreenSharing()">Share Screen</button>
+      <div id="chatting">
+        <ul id="messages"></ul>
+        <form id="form" action="">
+          <input id="input" autocomplete="off" placeholder="Post a question"/>
+          <button class="btn btn-success">Ask</button>
+        </form>
       </div>
     </div>
   </body>

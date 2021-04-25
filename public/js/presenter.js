@@ -624,19 +624,14 @@ socket.on("question", function (uuid, msg, name) {
   questions[uuid].push(msg, name);
   //entry information
   var fr = document.createElement("div");
-  var title = document.createElement("text");
-  var btn = document.createElement("button");
+  var title = document.createElement("div");
   fr.className = "fr";
   fr.id = uuid;
   fr.style.height = "20%";
   len = Object.keys(questions).length;
-  fr.style.backgroundColor = colors[len%8];
   title.className = "tit";
-  title.textContent = msg;
+  title.innerHTML = msg;
   fr.appendChild(title);
-  btn.className = "btn";
-  btn.textContent = "Detail";
-  fr.appendChild(btn);
 
   document.getElementById("questions").appendChild(fr);
 //detail information
@@ -644,41 +639,41 @@ socket.on("question", function (uuid, msg, name) {
   var biginfo = document.createElement("div");
   biginfo.id = uuid + "--detail"
   biginfo.className = "biginfo";
-  biginfo.style.backgroundColor = colors[len%8];
   document.getElementsByTagName("BODY")[0].appendChild(biginfo);
 
-  var btitle = document.createElement("text");
-  btitle.textContent = list[0];
+  var btitle = document.createElement("div");
+  btitle.innerHTML = "Q: " + list[0];
   btitle.className = "btitle";
-  biginfo.appendChild(btitle);
 
   var cont = document.createElement("div");
   cont.id = uuid + "-content";
-  biginfo.appendChild(cont);
+  cont.className = "cont";
 
   var inp = document.createElement("input");
   inp.id = uuid + "-ans";
   inp.className = "inp";
   inp.placeholder = "Answer";
-  biginfo.appendChild(inp);
-  var sub = document.createElement("button");
+  var sub = document.createElement("div");
   sub.id = uuid + "-sub";
   sub.className = "sub";
-  sub.textContent = "Submit";
+  sub.innerHTML = "Submit";
   sub.onclick = function(){
     sendnback(uuid);
   }
-  var clobtn = document.createElement("button");
-  clobtn.textContent = "Close";
+  var clobtn = document.createElement("div");
+  clobtn.innerHTML = "<i class='fas fa-chevron-left'></i> Close";
   clobtn.className = "clobtn";
   clobtn.onclick = function(){
     closenres(biginfo.id);
   }
-  biginfo.appendChild(sub);
   biginfo.appendChild(clobtn);
+  biginfo.appendChild(btitle);
+  btitle.appendChild(cont);
+  biginfo.appendChild(inp);
+  biginfo.appendChild(sub);
   biginfo.style.display = "none";
 
-  btn.onclick = function(){
+  fr.onclick = function(){
     showbig(biginfo.id);
   }
 });
@@ -706,9 +701,8 @@ function sendnback(uuid){
     socket.emit("message", ROOM_ID, "answer", uuid, answer, myName);
     input.value = "";
   }
+  document.getElementById(uuid + "-ans").value = "";
   var id = uuid + "--detail";
-  document.getElementById(id).style.display = "none";
-  document.getElementById("questions").style.display = "block";
 }
 
 function doupdate(uuid){

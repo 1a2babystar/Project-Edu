@@ -23,9 +23,9 @@
     position: absolute;
     bottom: 8%;
     right: 1%;
+    z-index: 2;
     height: 50%;
     width: 17%;
-    border-radius: 30px;
     overflow-y: scroll;
   }
 
@@ -36,7 +36,7 @@
   }
 
   #questions::-webkit-scrollbar-thumb{
-    background-color: rgba(0, 0, 0, 0.2);
+    background-color: rgba(0, 0, 0, 0.5);
     border-radius: 30px;
   }
 
@@ -139,60 +139,108 @@
     background: #efefef;
   }
 
-  .fr{
-      border-radius: 30px;
-      margin: 10px;
-  }
-
-  .tit{
-      text-align: center;
-      color: white;
-      margin: 10%;
-  }
-
-  /* .btn{
-      position: relative;
-      bottom: 5%;
-      right: 5%;
-  } */
-
-  .biginfo{
-      position: absolute;
-      bottom: 8%;
-      right: 1%;
-      height: 50%;
-      width: 17%;
-      border-radius: 30px;
-      z-index: 10;
-      overflow-y: scroll;
-  }
-
-  .btitle{
-      text-align: center;
-      color: white;
-      margin: 10%;
-  }
-
-  .inp{
-      position: absolute;
-      width: 80%;
-      bottom: 5%;
-      right: 10%;
-  }
-
-  .sub{
-      position: absolute;
-      width: 5%;
-      bottom: 5%;
-      right: 5%;
-  }
-
-  .clobtn{
+  #mute{
     position: absolute;
-    width: 5%;
-    top: 5%;
-    right: 5%;
+    bottom: 2.5%;
+    left: 1%;
+    size: 100px;
   }
+
+  .fr{
+    color: rgba(0, 0, 0, 0.5);
+    border-top: 3px groove rgba(0, 0, 0, 0.1);
+    border-collapse: collapse;
+    font-family: 'Open Sans', sans-serif;
+}
+
+.fr:hover{
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
+.tit{
+  text-align: center;
+  word-wrap: break-word;
+  margin: 5%;
+  overflow: hidden;
+  height: 75%;
+  text-align: left;
+}
+
+.biginfo{
+  position: absolute;
+  bottom: 8%;
+  right: 1%;
+  height: 50%;
+  background-color: rgba(0, 0, 0, 0.02);
+  width: 17%;
+  border-radius: 30px;
+  z-index: 10;
+}
+
+.btitle{
+  text-align: left;
+  color: rgba(199, 80, 95, 1);
+  word-wrap: break-word;
+  margin-left: 5%;
+  border-bottom: 3px groove rgba(0, 0, 0, 0.1);
+  width: 90%;
+  height: 72%;
+  padding: 5%;
+  overflow-y: scroll;
+}
+
+.btitle::-webkit-scrollbar{
+  opacity: 40%;
+  width: 5px;
+  border-radius: 30px;
+}
+
+.btitle::-webkit-scrollbar-thumb{
+  background-color: rgba(0, 0, 0, 0.5);
+  border-radius: 30px;
+}
+
+.cont{
+  text-align: left;
+  margin-top: 10%;
+  color: rgba(80, 139, 199, 1);
+}
+
+.inp{
+  position: absolute;
+  outline: none;
+  width: 70%;
+  bottom: 3%;
+  left: 5%;
+}
+
+.sub{
+  position: absolute;
+  background-color: rgba(77,168,218,0.5);
+  border-radius: 5px;
+  width: 18%;
+  height: 5.5%;
+  bottom: 4%;
+  right: 5%;
+  text-align: center;
+}
+.sub:hover{
+  background-color: rgba(77,168,218,1);
+}
+
+.clobtn{
+  position: relative;
+  width: 90%;
+  margin-left: 5%;
+  margin-top: 3%;
+  padding: 5%;
+  color: rgba(0, 0, 0, 0.5);
+  border-bottom: 3px groove rgba(0, 0, 0, 0.1);
+}
+
+.clobtn:hover{
+  color: rgba(0, 0, 0, 0.8);
+}
 
   .Calibration{
     width: 20px;
