@@ -632,8 +632,22 @@ socket.on("question", function (uuid, msg, name) {
   title.className = "tit";
   title.innerHTML = msg;
   fr.appendChild(title);
+  var nq = document.createElement("i");
+  nq.className = "fas fa-question";
+  nq.id = uuid + "--nq";
+  nq.style.color = "red";
+  nq.style.position = "relative";
+  nq.style.left = "5%";
+  nq.style.float = "left";
+  fr.appendChild(nq);
+  var na = document.createElement("div");
+  na.className = "na";
+  na.id = uuid + "--na";
+  na.innerHTML = "New answer";
+  na.style.display = "none";
+  fr.appendChild(na);
 
-  document.getElementById("questions").appendChild(fr);
+  document.getElementById("questions").prepend(fr);
 //detail information
   list = questions[uuid];
   var biginfo = document.createElement("div");
@@ -664,7 +678,7 @@ socket.on("question", function (uuid, msg, name) {
   clobtn.innerHTML = "<i class='fas fa-chevron-left'></i> Close";
   clobtn.className = "clobtn";
   clobtn.onclick = function(){
-    closenres(biginfo.id);
+    closenres(uuid);
   }
   biginfo.appendChild(clobtn);
   biginfo.appendChild(btitle);
@@ -674,7 +688,7 @@ socket.on("question", function (uuid, msg, name) {
   biginfo.style.display = "none";
 
   fr.onclick = function(){
-    showbig(biginfo.id);
+    showbig(uuid);
   }
 });
 
@@ -687,12 +701,16 @@ socket.on("answer", function (uuid, msg, name) {
 });
 
 function showbig(id){
+  fr = document.getElementById(id);
+  fr.style.backgroundColor = "";
   document.getElementById("questions").style.display = "none";
-  document.getElementById(id).style.display = "block";
+  document.getElementById(id + "--detail").style.display = "block";
 }
 
 function closenres(id){
-  document.getElementById(id).style.display = "none";
+  document.getElementById(id + "--nq").style.display = "none";
+  document.getElementById(id + "--na").style.display = "none";
+  document.getElementById(id + "--detail").style.display = "none";
   document.getElementById("questions").style.display = "block";
 }
 function sendnback(uuid){
@@ -718,6 +736,10 @@ function doupdate(uuid){
       det.appendChild(newline);
     }
   }
+  fr = document.getElementById(uuid);
+  document.getElementById("questions").removeChild(fr);
+  document.getElementById("questions").prepend(fr);
+  document.getElementById(uuid + "--na").style.display = "block";
 }
 
 function partilist(){

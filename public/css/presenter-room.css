@@ -23,6 +23,7 @@
     height: 70%;
     width: 17%;
     overflow-y: scroll;
+    overflow-x: hidden;
   }
 
   #questions::-webkit-scrollbar{
@@ -52,8 +53,15 @@
     word-wrap: break-word;
     margin: 5%;
     overflow: hidden;
-    height: 75%;
+    height: 50%;
     text-align: left;
+}
+
+.na{
+    position: relative;
+    color: red;
+    left: 5%;
+    margin-left: 10%;
 }
 
 .biginfo{
