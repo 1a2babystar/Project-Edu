@@ -143,6 +143,7 @@ navigator.mediaDevices
     }
 
     // Initiate Google Cloud STT transcription.
+    //asd
     AudioStreamer.initRecording(
       stream,
       (data, userId) => {

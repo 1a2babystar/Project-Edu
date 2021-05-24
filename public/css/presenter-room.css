@@ -145,19 +145,12 @@ font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
 }
 
 #messages {
-    list-style-type: none;
-    word-wrap: break-word;
-    white-space: pre-wrap;
-    /* position: absolute;
-    bottom: 5%;
-    right: 5%;
-    width: 100%;
-    height: 70%;
-    overflow-y: scroll; */
-    margin: 0;
-    overflow: hidden;
-    overflow-y: scroll;
-    height: inherit;
+    position:absolute;
+    top: 2%;
+    right: 20%;
+    width : 30%;
+    height: 100%;
+    overflow-x: scroll;
 }
 
 .message {
