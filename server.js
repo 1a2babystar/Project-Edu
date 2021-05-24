@@ -61,16 +61,16 @@ app.use("/room", roomRouter);
 /* ################ Socket.io logic ################ */
 
 // Require socket event handlers.
-const registerPresenterHandler = require("./handlers/presenterHandler");
-const registerSupervisorHandler = require("./handlers/supervisorHandler");
 const registerParticipantHandler = require("./handlers/participantHandler");
 const registerServerHandler = require("./handlers/serverHandler");
+const registerSpeechHandler = require("./handlers/speechHandler");
+const registerRoomHandler = require("./handlers/roomHandler");
 
+registerRoomHandler(io);
 io.on("connection", (socket) => {
-  registerPresenterHandler(io, socket);
-  registerSupervisorHandler(io, socket);
   registerParticipantHandler(io, socket);
   registerServerHandler(io, socket);
+  registerSpeechHandler(io, socket);
 });
 
 // catch 404 and forward to error handler
