@@ -1,34 +1,30 @@
+/**
+ * Defines AudioStreamer, which records and sends audio stream (microphone)
+ * to the server, and starts a speech recognition stream.
+ * This file DOES NOT include event handlers on data arrival on the socket,
+ * because those events can fire even if the user did not start audio streaming.
+ */
+
 // Stream Audio
 let bufferSize = 2048,
   AudioContext,
   context,
   processor,
   input,
-  globalStream;
+  globalStream,
+  recognizeSocket;
 
-/*
-// Google Cloud STT request.
-const request = {
-  config: {
-    encoding: "LINEAR16",
-    sampleRateHertz: 16000,
-    languageCode: "en-US",
-    profanityFilter: false,
-    enableWordTimeOffsets: true,
-  },
-  interimResults: true, // If you want interim results, set this to true
-};
-*/
-
-var AudioStreamer = {
+let AudioStreamer = {
   /**
    * @param {MediaStream} stream The media stream to send to the server
-   * @param {function} onData Callback to run on data each time it's received
+   * @param {Socket} socket The socket instance to communicate events
    * @param {function} onError Callback to run on an error if one is emitted.
    */
-  initRecording: function (stream, onData, onError) {
+  initRecording: function (stream, socket, onError) {
+    recognizeSocket = socket;
+
     userIdPromise.then((userId) => {
-      socket.emit("startGoogleCloudStream", ROOM_ID, userId);
+      recognizeSocket?.emit("startRecognitionStream", ROOM_ID, userId);
     });
 
     AudioContext = window.AudioContext || window.webkitAudioContext;
@@ -49,24 +45,27 @@ var AudioStreamer = {
 
     handleSuccess(stream);
 
+    /*
     // Bind the data handler callback
-    if (onData) {
-      socket.on("speechData", (data, userId) => {
-        onData(data, userId);
-      });
-    }
+    recognizeSocket?.on(
+      "speechData",
+      (transcript, userId, paragraphTimestamp) => {
+        console.log(`${names[userId]}(${paragraphTimestamp}): ${transcript}`);
+      }
+    );
+    */
 
-    socket.on("googleCloudStreamError", (error) => {
+    recognizeSocket?.on("recognitionError", (error) => {
       if (onError) {
         onError("error");
       }
       // We don't want to emit another end stream event
-      // closeAll();
+      closeAll();
     });
   },
 
   stopRecording: function () {
-    socket.emit("endGoogleCloudStream", "");
+    recognizeSocket?.emit("endRecognitionStream", "");
     closeAll();
   },
 };
@@ -80,12 +79,12 @@ var AudioStreamer = {
 function microphoneProcess(e) {
   var left = e.inputBuffer.getChannelData(0);
   var left16 = convertFloat32ToInt16(left);
-  socket.emit("binaryAudioData", left16);
+  recognizeSocket?.emit("binaryAudioData", left16);
 }
 
 /**
  * Converts a buffer from float32 to int16. Necessary for streaming.
- * sampleRateHertz of 1600.
+ * sampleRateHertz of 16000.
  *
  * @param {object} buffer Buffer being converted
  */
@@ -106,8 +105,11 @@ function convertFloat32ToInt16(buffer) {
  */
 function closeAll() {
   // Clear the listeners (prevents issue if opening and closing repeatedly)
-  socket.off("speechData");
-  socket.off("googleCloudStreamError");
+  if (recognizeSocket) {
+    recognizeSocket.off("speechData");
+    recognizeSocket.off("recognitionError");
+    recognizeSocket = null;
+  }
   /*
   let tracks = globalStream ? globalStream.getTracks() : null;
   let track = tracks ? tracks[0] : null;
